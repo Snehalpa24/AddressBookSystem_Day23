@@ -1,36 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
 namespace AdressBookSystem
 {
-    public class AdressBookBuilder : IContacts
+    class AdressBookBuilder:IContacts
     {
-        public static string connectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = AddressBook; Integrated Security = True";
-        SqlConnection sqlConnection = new SqlConnection(connectionString);
-
-        /// <summary>
-        /// Checks the connection.
-        /// </summary>
-        public void checkConnection()
-        {
-            try
-            {
-                this.sqlConnection.Open();
-                Console.WriteLine("connection established");
-                this.sqlConnection.Close();
-            }
-            catch
-            {
-                Console.WriteLine("not established");
-            }
-        }
-
         public List<Contact> contactList;
-
         /// <summary>
         /// Initializes a new instance of the list <see cref="AdressBookBuilder"/> class.
         /// </summary>
@@ -38,7 +15,6 @@ namespace AdressBookSystem
         {
             this.contactList = new List<Contact>();
         }
-
         /// <summary>
         /// Adds the contact but contact is not be duplicated
         /// </summary>
@@ -52,18 +28,17 @@ namespace AdressBookSystem
         /// <param name="email">The email of person</param>
         public void addContact(string firstName, string lastName, string address, string city, string state, string zip, string phoneNumber, string email)
         {
-            bool duplicate = equals(firstName);
+            bool duplicate=equals(firstName);
             if (!duplicate)
             {
                 Contact contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
                 contactList.Add(contact);
             }
-            else
+            else 
             {
                 Console.WriteLine("Cannot add duplicate contacts when you give first name same");
             }
         }
-
         /// <summary>
         /// Equalses the specified first name for duplicate name.
         /// </summary>
@@ -76,7 +51,6 @@ namespace AdressBookSystem
             else
                 return false;
         }
-
         /// <summary>
         /// Edits the contact with the help of first name of person
         /// </summary>
@@ -111,7 +85,6 @@ namespace AdressBookSystem
                 Console.WriteLine("Contact not found");
             }
         }
-
         /// <summary>
         /// Deletes the contact of person with the help of first name
         /// </summary>
@@ -134,7 +107,6 @@ namespace AdressBookSystem
                 Console.WriteLine("Contact not found");
             }
         }
-
         /// <summary>
         /// Displays the contact of persons
         /// </summary>
@@ -152,23 +124,17 @@ namespace AdressBookSystem
                 Console.WriteLine("email = " + contact.email);
             }
         }
-
-        /// <summary>
-        /// Find  the persons by place ie state or city.
-        /// </summary>
-        /// <param name="place">The place.</param>
-        /// <returns>person information</returns>
         public List<string> findPersons(string place)
         {
             List<string> personFounded = new List<string>();
-            foreach (Contact contacts in contactList.FindAll(e => (e.city.Equals(place))).ToList())
+            foreach(Contact contacts in contactList.FindAll(e => (e.city.Equals(place))).ToList())
             {
-                string name = contacts.firstName + " " + contacts.lastName;
+                string name=contacts.firstName + " " + contacts.lastName;
                 personFounded.Add(name);
             }
             if (personFounded.Count == 0)
             {
-                foreach (Contact contacts in contactList.FindAll(e => (e.state.Equals(place))).ToList())
+                foreach(Contact contacts in contactList.FindAll(e => (e.state.Equals(place))).ToList())
                 {
                     string name = contacts.firstName + " " + contacts.lastName;
                     personFounded.Add(name);
@@ -176,57 +142,5 @@ namespace AdressBookSystem
             }
             return personFounded;
         }
-
-        /// <summary>
-        /// Sort methode for sort entites in adress book.
-        /// </summary>
-        public void sortByFirstName()
-        {
-            contactList.Sort(new Comparison<Contact>((a, b) => string.Compare(a.firstName, b.firstName)));
-            Console.WriteLine("Contacts after sorting By City = ");
-            foreach (Contact contact in contactList)
-            {
-                Console.WriteLine("\n FirstName = " + contact.firstName + "\n Last Name = " + contact.lastName + "\n Address = " + contact.address + "\n City = " + contact.city + "\n State = " + contact.state + "\n Zip = " + contact.zip + "\n Phone Number = " + contact.phoneNumber + "\n Email = " + contact.email);
-            }
-        }
-
-        /// <summary>
-        /// Sort methode for sort entites in adress book by city.
-        /// </summary>
-        public void sortByCity()
-        {
-            contactList.Sort(new Comparison<Contact>((a, b) => string.Compare(a.city, b.city)));
-            Console.WriteLine("Contacts after sorting By City = ");
-            foreach (Contact contact in contactList)
-            {
-                Console.WriteLine("\n FirstName = " + contact.firstName + "\n Last Name = " + contact.lastName + "\n Address = " + contact.address + "\n City = " + contact.city + "\n State = " + contact.state + "\n Zip = " + contact.zip + "\n Phone Number = " + contact.phoneNumber + "\n Email = " + contact.email);
-            }
-        }
-
-        /// <summary>
-        /// Sort methode for sort entites in adress book by state.
-        /// </summary>
-        public void sortByState()
-        {
-            contactList.Sort(new Comparison<Contact>((a, b) => string.Compare(a.state, b.state)));
-            Console.WriteLine("Contacts after sorting By State = ");
-            foreach (Contact contact in contactList)
-            {
-                Console.WriteLine("\n FirstName = " + contact.firstName + "\n Last Name = " + contact.lastName + "\n Address = " + contact.address + "\n City = " + contact.city + "\n State = " + contact.state + "\n Zip = " + contact.zip + "\n Phone Number = " + contact.phoneNumber + "\n Email = " + contact.email);
-            }
-        }
-
-        /// <summary>
-        /// Sort methode for sort entites in adress book by zip.
-        /// </summary>
-        public void sortByZip()
-        {
-            contactList.Sort(new Comparison<Contact>((a, b) => string.Compare(a.zip, b.zip)));
-            Console.WriteLine("Contacts after sorting By Zip = ");
-            foreach (Contact contact in contactList)
-            {
-                Console.WriteLine("\n FirstName = " + contact.firstName + "\n Last Name = " + contact.lastName + "\n Address = " + contact.address + "\n City = " + contact.city + "\n State = " + contact.state + "\n Zip = " + contact.zip + "\n Phone Number = " + contact.phoneNumber + "\n Email = " + contact.email);
-            }
-        }
-}
+    }
 }
