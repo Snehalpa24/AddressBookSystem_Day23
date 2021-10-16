@@ -1,106 +1,104 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace Address_Book_Day9
+namespace AdressBookSystem
 {
-    class UC6AddAddressBook
+    class AdressBookBuilder:IContacts
     {
-        public static List<Person2> People2 = new List<Person2>();
-        
-        public static void AddAddress()
+        public List<Contact> contactList;
+
+        public AdressBookBuilder()
         {
-            
-            string command = "";
-            while (command != "exit")
+            this.contactList = new List<Contact>();
+        }
+        
+        public void addContact(String firstName, String lastName, String address, String city, String state, String zip, String phoneNumber, String email)
+        {
+            bool duplicate=equals(firstName);
+            if (!duplicate)
             {
-                Console.Clear();
-                Console.WriteLine("Address Book 2");
-                Console.WriteLine("***********************************************");
-                Console.WriteLine("Commands that can be used are: 'add', 'remove', 'edit', 'addmultiple',  'list', 'exit'.");
-                Console.WriteLine("Please enter a command :");
-                command = Console.ReadLine().ToLower();
-                switch (command)
+                Contact contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
+                contactList.Add(contact);
+            }
+            else 
+            {
+                Console.WriteLine("Cannot add duplicate contacts first name");
+            }
+        }
+        
+        private bool equals(string firstName)
+        {
+            if (this.contactList.Any(e => e.firstName == firstName))
+                return true;
+            else
+                return false;
+        }
+        
+        public void editContact(string firstName)
+        {
+            int flag = 1;
+            foreach (Contact contact in contactList)
+            {
+                if (firstName.Equals(contact.firstName))
                 {
-                    case "add":
-                        UC2_AddNewContact.AddPerson();
-                        break;
-                    case "remove":
-                        UC4_DeleteContact.RemovePerson();
-                        break;
-                    case "edit":
-                        UC3_EditContact.EditContact();
-                        break;
-                    case "addmultiple":
-                        UC5AddMultiplePerson.addMultiple();
-                        break;
-                    case "list":
-                        UC1_CreatContact_Program.ListPeople();
-                        break;
+                    flag = 0;
+                    Console.WriteLine("Enter last name = ");
+                    contact.lastName = Console.ReadLine();
+                    Console.WriteLine("Enter address= ");
+                    contact.address = Console.ReadLine();
+                    Console.WriteLine("Enter city= ");
+                    contact.city = Console.ReadLine();
+                    Console.WriteLine("Enter state= ");
+                    contact.state = Console.ReadLine();
+                    Console.WriteLine("Enter zip= ");
+                    contact.zip = Console.ReadLine();
+                    Console.WriteLine("Enter phoneNumber= ");
+                    contact.phoneNumber = Console.ReadLine();
+                    Console.WriteLine("Enter email= ");
+                    contact.email = Console.ReadLine();
+                    break;
                 }
             }
-
+            if (flag == 1)
+            {
+                Console.WriteLine("Contact not found");
+            }
         }
 
-        public static void AddPerson2()
+        public void deleteContact(string firstName)
         {
-            Person2 person2 = new Person2();
-
-            Console.WriteLine("First Name -");
-            person2.FirstName = Console.ReadLine();
-
-            Console.WriteLine("Last Name -");
-            person2.LastName = Console.ReadLine();
-
-            Console.WriteLine("Address -");
-            person2.Address = Console.ReadLine();
-
-            Console.WriteLine("City -");
-            person2.City = Console.ReadLine();
-
-            Console.WriteLine("State -");
-            person2.State = Console.ReadLine();
-
-            Console.WriteLine("Zip -");
-            person2.Zip = Console.ReadLine();
-
-            Console.WriteLine("Phone Number -");
-            person2.PhoneNumber = Console.ReadLine();
-
-            Console.WriteLine("Email -");
-            person2.Email = Console.ReadLine();
-
-            UC6AddAddressBook.People2.Add(person2);
+            int flag = 1;
+            foreach (Contact contact in contactList)
+            {
+                if (firstName.Equals(contact.firstName))
+                {
+                    flag = 0;
+                    contactList.Remove(contact);
+                    Console.WriteLine("Sucessfully deleted");
+                    break;
+                }
+            }
+            if (flag == 1)
+            {
+                Console.WriteLine("Contact not found");
+            }
         }
 
-        public static void PrintPerson(Person2 person2)
+        public void displayContact()
         {
-            Console.WriteLine("First Name: " + person2.FirstName);
-            Console.WriteLine("Last Name: " + person2.LastName);
-            Console.WriteLine("Address: " + person2.Address);
-            Console.WriteLine("City: " + person2.City);
-            Console.WriteLine("State: " + person2.State);
-            Console.WriteLine("Zip: " + person2.Zip);
-            Console.WriteLine("Phone Number: " + person2.PhoneNumber);
-            Console.WriteLine("Email: " + person2.Email);
-            Console.WriteLine("---------------------------------------");
-
+            foreach (Contact contact in contactList)
+            {
+                Console.WriteLine("\nFirst name = " + contact.firstName);
+                Console.WriteLine("Last name = " + contact.lastName);
+                Console.WriteLine("Address = " + contact.address);
+                Console.WriteLine("city = " + contact.city);
+                Console.WriteLine("state = " + contact.state);
+                Console.WriteLine("zip = " + contact.zip);
+                Console.WriteLine("phoneNumber = " + contact.phoneNumber);
+                Console.WriteLine("email = " + contact.email);
+            }
         }
-    }
-
-    
-
-    public class Person2
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Address { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string Zip { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Email { get; set; }
-
     }
 }
-    
