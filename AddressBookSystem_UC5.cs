@@ -1,57 +1,89 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AdressBookSystem
 {
-    public class AddressBookOperation
+    class AdressBookBuilder:IContacts
     {
-        public List<Contact> contactsList = new List<Contact>();
-
-        /// <summary>
-        /// Adds the employee to payroll.
-        /// </summary>
-        /// <param name="employeelist">The employeelist.</param>
-        public void addContactToPayroll(List<Contact> employeelist)
+        public List<Contact> contactList;
+        public AdressBookBuilder()
         {
-            employeelist.ForEach(contactData =>
-            {
-                Console.WriteLine("Employee being added = " + contactData.firstName);
-                this.addContactPayroll(contactData);
-                Console.WriteLine("Employee added =" + contactData.firstName);
-            });
-            Console.WriteLine(this.contactsList.ToString());
-        }
-
-        /// <summary>
-        /// Adds the employee to payroll.
-        /// </summary>
-        /// <param name="employeeData">The employee data.</param>
-        public void addContactPayroll(Contact contactData)
-        {
-            contactsList.Add(contactData);
-
+            this.contactList = new List<Contact>();
         }
         
-        /// <summary>
-        /// Add the contacts to address book with thread.
-        /// </summary>
-        /// <param name="contactsList">The contacts list.</param>
-        public void addContactToPayrollWithThread(List<Contact> contactsList)
+        public void addContact(String fName, String lName, String address, String city, String state, String zip, String phoneNumber, String email)
         {
-            contactsList.ForEach(contactData =>
-            {
-                Task thread = new Task(() =>
-                {
-                    Console.WriteLine("Employee being added = " + contactData.firstName);
-                    this.addContactPayroll(contactData);
-                    Console.WriteLine("Employee added =" + contactData.firstName);
-                });
+            Contact contact = new Contact(fName,lName,address,city,state,zip,phoneNumber,email);
+            contactList.Add(contact);
+        }
+        
+        public void editContact(string fName)
+        {
 
-                thread.Start();
-            });
-            Console.WriteLine(this.contactsList.Count);
+            int flag = 1;
+            foreach (Contact contact in contactList)
+            {
+                if (fName.Equals(contact.fName))
+                {
+                    flag = 0;
+                    Console.WriteLine("Enter last name = ");
+                    string lName = Console.ReadLine();
+                    Console.WriteLine("Enter address= ");
+                    String address = Console.ReadLine();
+                    Console.WriteLine("Enter city= ");
+                    String city = Console.ReadLine();
+                    Console.WriteLine("Enter state= ");
+                    String state = Console.ReadLine();
+                    Console.WriteLine("Enter zip= ");
+                    String zip = Console.ReadLine();
+                    Console.WriteLine("Enter phoneNumber= ");
+                    String phoneNumber = Console.ReadLine();
+                    Console.WriteLine("Enter email= ");
+                    String email = Console.ReadLine();
+                    break;
+                }
+
+            }
+            if (flag == 1)
+            {
+                Console.WriteLine("Contact not found");
+            }
+        }
+
+        public void deleteContact(string fName)
+        {
+            int flag = 1;
+            foreach (Contact contact in contactList)
+            {
+                if (fName.Equals(contact.fName))
+                {
+                    flag = 0;
+                    contactList.Remove(contact);
+                    Console.WriteLine("Sucessfully deleted");
+                    break;
+                }
+            }
+            if (flag == 1)
+            {
+                Console.WriteLine("Contact not found");
+            }
+        }
+
+        public void displayContact()
+        {
+            foreach(Contact contact in contactList)
+            {
+                Console.WriteLine("\nFirst name = " + contact.fName);
+                Console.WriteLine("Last name = " + contact.lName);
+                Console.WriteLine("Address = " + contact.address);
+                Console.WriteLine("city = " + contact.city);
+                Console.WriteLine("state = " + contact.state);
+                Console.WriteLine("zip = " + contact.zip);
+                Console.WriteLine("phoneNumber = " + contact.phoneNumber);
+                Console.WriteLine("email = " + contact.email);
+
+            }
         }
     }
 }
